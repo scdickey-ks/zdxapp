@@ -1,0 +1,17 @@
+# ZDX API exploration — project rules
+
+## Security and privacy (non-negotiable)
+
+- **Secrets:** Never commit, log, or paste API keys, tokens, or credentials. Use `.env` (gitignored) or vault.
+- **PII / identifiers:** Do not paste raw ZDX responses containing user/device IDs into chat. Use sanitized examples only.
+- **AI context:** Assume anything in chat may be sent to the AI provider. Keep sensitive data out of Cursor context.
+- **Code review:** Treat AI-generated code as draft. Require human review before merge, especially for auth, secrets, or data handling.
+- **Environment:** Default to test; require explicit confirmation for production execution.
+- **External calls:** Document all outbound endpoints (ZDX, webhook, ServiceNow) in architecture; no undocumented egress.
+
+---
+
+# Paste your team / org rules below this line.
+# ---------------------------------------------------------------------------
+
+

@@ -1,0 +1,41 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Avoid committing exported API key JSON drops (use .env only)
+*-Read-Only.json
+zscaler-*-Read-Only.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# Node (if used)
+node_modules/
+npm-debug.log*
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs & local artifacts
+logs/
+*.log
+tmp/
+.cache/
+
+# Pilot — local curl wrapper with URL (may embed patterns)
+scripts/pilot/smoke_curl.sh

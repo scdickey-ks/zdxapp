@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "ZDX Smoke (K&S ZDXApp)",
+    "description": "Import and set collection variables (no secrets in file). Legacy token path matches zscaler-sdk-go ZDX client; OneAPI token uses zslogin per zscaler-sdk-go.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "legacy_api_base", "value": "https://api.zscalerthree.net" },
+    { "key": "zdx_api_base", "value": "https://api.zscalerthree.net", "description": "Match token source: legacy/hashed → api.{cloud}.net; OneAPI Bearer → often https://api.zsapi.net" },
+    { "key": "key_id", "value": "" },
+    { "key": "key_secret", "value": "" },
+    { "key": "vanity_domain", "value": "" },
+    { "key": "access_token", "value": "" },
+    { "key": "from", "value": "0", "description": "Unix epoch start" },
+    { "key": "to", "value": "0", "description": "Unix epoch end" }
+  ],
+  "item": [
+    {
+      "name": "1 Legacy — POST token (JSON body)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"key_id\": \"{{key_id}}\",\n  \"key_secret\": \"<SHA256(hex) of secret:unix_ts — use script or zdx_api_smoke.py>\",\n  \"timestamp\": 0\n}"
+        },
+        "url": "{{legacy_api_base}}/v1/oauth/token"
+      }
+    },
+    {
+      "name": "2 OneAPI — POST oauth (form)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "grant_type", "value": "client_credentials" },
+            { "key": "client_id", "value": "{{key_id}}" },
+            { "key": "client_secret", "value": "{{key_secret}}" },
+            { "key": "audience", "value": "https://api.zscaler.com" }
+          ]
+        },
+        "url": "https://{{vanity_domain}}.zslogin.net/oauth2/v1/token"
+      }
+    },
+    {
+      "name": "3 ZDX — GET devices (Bearer)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "url": "{{zdx_api_base}}/zdx/v1/devices?from={{from}}&to={{to}}"
+      }
+    }
+  ]
+}
